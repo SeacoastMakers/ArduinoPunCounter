@@ -1,21 +1,28 @@
-//The main code to run the Pun Counter
-/*Hardware:
--Arduino Uno
--Arcade button
--Phico Datavision LCD-display module model no: DV-16215-1-S2RB
--
-
-*/
+/* PhicoDisplayModule Library-example
+ *  This library provides wrapper functions in order to control
+ *  Phico Datavision LCD-display module model no: DV-16215-1-S2RB.
+ *  
+ *  Functions underneath the hood uses SoftwareSerial library 
+ *  on given pins. Please note that!
+ *  
+ *  Arduino board used here was Arduino Uno R3. Although any board should work, 
+ *  since activity is based on SoftwareSerial-library.
+ *  
+ *  You have to remove solderbridge S3 and add solderbridge S2 in order
+ *  to get this display to work with 9600 baud and inverted logic.
+ *  
+ */
 
 #include <DV16215.h>
 //#include String
 
 // Create SoftwareSerial
-SoftwareSerial connection(10, 11, true); // RX, TX, inverted logic
+SoftwareSerial connection(11, 10, true); // RX, TX, inverted logic
 
 // Create myLCD with SoftwareSerial connection
 LCD_DV16215 myLCD(&connection);
 
+const int SPEAKER = 6;
 const int BUTTON = 8;
 const int delaytime = 50;
 int currentcount= 0;
