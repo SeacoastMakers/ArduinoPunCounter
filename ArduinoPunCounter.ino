@@ -1,42 +1,35 @@
-/* PhicoDisplayModule Library-example
- *  This library provides wrapper functions in order to control
- *  Phico Datavision LCD-display module model no: DV-16215-1-S2RB.
+/* PunCounter device
+ *  This is a library for a device that displays a counter. Every time the button is pressed, it increments the counter and plays a sound.
  *  
- *  Functions underneath the hood uses SoftwareSerial library 
- *  on given pins. Please note that!
- *  
- *  Arduino board used here was Arduino Uno R3. Although any board should work, 
- *  since activity is based on SoftwareSerial-library.
- *  
- *  You have to remove solderbridge S3 and add solderbridge S2 in order
- *  to get this display to work with 9600 baud and inverted logic.
- *  
+ *  Components:
+ *  Arcade button (with a 20k resistor to ground)
+ *  Small 8 ohm speaker
+ *  Arduino Uno
+ *  3D printed case
+ *  LCD: Phico Datavision LCD-display module model no: DV-16215-1-S2RB.
  */
 
 #include <DV16215.h>
 #include "pitches.h"
 #include <EEPROM.h>
 
-int melody[] = {
-  NOTE_F3,NOTE_G3
-};
-int noteDurations[] = {
-  16,8
-};
-int EEPROMaddr = 0;
-int alltimecount = 0;
-
-// Create SoftwareSerial
+// Create SoftwareSerial and myLCD with SoftwareSerial connection
 SoftwareSerial connection(11, 10, true); // RX, TX, inverted logic
-
-// Create myLCD with SoftwareSerial connection
 LCD_DV16215 myLCD(&connection);
 
+//Speaker and button
 const int SPEAKER = 5;
 const int BUTTON = 8;
 const int delaytime = 50;
-int currentcount= 0;
-char countline[16];
+
+//Sound effect
+int melody[] = {NOTE_F3,NOTE_G3};
+int noteDurations[] = {16,8};
+
+//EEPROM variables
+int EEPROMaddr = 0;
+unsigned int alltimecount = 0;
+unsigned int currentcount = 0;
 
 void setup() 
 {
@@ -44,10 +37,13 @@ void setup()
   myLCD.clearAllDisplays();   // Clear everything just in case
   pinMode(BUTTON, INPUT);
   myLCD.clearDisplay();
-  alltimecount = EEPROM.read(EEPROMaddr);
+  //uncomment this and run it once if you need to clear the memory address
+  //EEPROM.get(EEPROMaddr, 0);
+  EEPROM.get(EEPROMaddr, alltimecount);
   msgDisp1();
   msgDisp2();
 }
+
 
 void loop() 
 {
@@ -60,8 +56,8 @@ void loop()
     delay(4);
     msgDisp2();
     delay(4);
-    playMeloday();
-    EEPROM.write(EEPROMaddr, alltimecount);
+    playMelody();
+    EEPROM.put(EEPROMaddr, alltimecount);
   }
 }
 
@@ -72,7 +68,7 @@ void msgDisp1()
   myLCD.write("Pun Count:");
   myLCD.setDisplayTop(0,2);
   char cstr[16];
-  itoa(currentcount, cstr, 10);
+  utoa(currentcount, cstr, 10);
   myLCD.write(cstr);
 }
 
@@ -82,11 +78,11 @@ void msgDisp2()
   myLCD.write("All Time:");
   myLCD.setDisplayBottom(0,2);
   char cstr[16];
-  itoa(alltimecount, cstr, 10);
+  utoa(alltimecount, cstr, 10);
   myLCD.write(cstr);
 }
 
-void playMeloday(){
+void playMelody(){
   for (int thisNote = 0; thisNote < 2; thisNote++) {
     // to calculate the note duration, take one second divided by the note type.
     //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
