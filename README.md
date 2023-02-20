@@ -7,3 +7,7 @@ Is it a good idea? Subjective.
 Does it count puns? Yes.
 
 There are two versions which use different LCD displays.
+
+ST-1113LCD uses the standard LiquidCrystal.h library.
+
+PhicoLCD uses a special library DV16215.h, the folder for this library is included in this repository.
