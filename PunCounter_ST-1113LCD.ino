@@ -39,35 +39,38 @@ int noteDurations[] = {
 
 const int delaytime = 50;
 unsigned int currentcount= 0;
-char countline[16];
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
   pinMode(BUTTON, INPUT);
-
-  //EEPROM.put(EEPROMaddr, 0); //To reset to 0 or clear any random data, run this one time. Recomment when done.
-  EEPROM.get(EEPROMaddr, currentcount);
   
   lcd.begin(16, 2);
-
   lcd.setCursor(0,0);
-
   lcd.print("Hello, Jokester");
   lcd.setCursor(0,1);
   lcd.print("LOLOLOLOLOL");
-  delay(1000);
+  
+  //EEPROM.put(EEPROMaddr, 0); //To reset to 0 or clear any random data, run this one time. Recomment when done.
+  EEPROM.get(EEPROMaddr, currentcount);
+  delay(100);
   msgDisp1();
+  playTone();
 }
 
 void loop() {
  if(digitalRead(BUTTON) == HIGH){
     currentcount++;
     EEPROM.put(EEPROMaddr, currentcount);
-    msgDisp1();
+    msgUpdate();
     playTone();
-    delay(200);
+    delay(150);
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void msgDisp1()
 {
@@ -80,8 +83,19 @@ void msgDisp1()
   lcd.write(cstr);
 }
 
+void msgUpdate()
+{
+  lcd.setCursor(0,1);
+  char cstr[16];
+  itoa(currentcount, cstr, 10);
+  lcd.write(cstr);
+}
+
 void playTone()
 {
+  lcd.setCursor(13,1);
+  lcd.write("LOL");
+  
   for (int thisNote = 0; thisNote < 3; thisNote++) {
     // note duration = one second divided by the note type.
     //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
@@ -93,4 +107,6 @@ void playTone()
     delay(pauseBetweenNotes);
     noTone(SPEAKER);
   }
+  lcd.setCursor(13,1);
+  lcd.write("   ");
 }
