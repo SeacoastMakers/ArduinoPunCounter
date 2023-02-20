@@ -5,3 +5,5 @@ Is it necessary? No.
 Is it efficient use of computing power? No.
 Is it a good idea? Subjective.
 Does it count puns? Yes.
+
+There are two versions which use different LCD displays.
