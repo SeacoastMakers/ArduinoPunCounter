@@ -1,12 +1,13 @@
-/* PunCounter device
- *  This is a library for a device that displays a counter. Every time the button is pressed, it increments the counter and plays a sound.
- *  
- *  Components:
- *  Arcade button (with a 20k resistor to ground)
- *  Small 8 ohm speaker
- *  Arduino Uno
- *  3D printed case
- *  LCD: Phico Datavision LCD-display module model no: DV-16215-1-S2RB.
+/* PunCounter - a simple device to incenivize telling puns. 
+Displays a count on the screen. Every time the button is pressed, a sound plays and the count is updated.
+Great if you're a real button-pusher!
+
+Components:
+Arcade button (with a 20k resistor to ground)
+Small 8 ohm speaker
+Arduino Uno
+3D printed case
+LCD: Phico Datavision LCD-display module model no: DV-16215-1-S2RB. Has two modules on one board.
  */
 
 #include <DV16215.h>
